@@ -6,7 +6,7 @@
  */
 
 import WaveSurfer, { type WaveSurferOptions } from 'wavesurfer.js'
-import RegionsPlugin from 'wavesurfer.js/dist/plugins/regions.js'
+import RegionsPlugin, { type RegionParams } from 'wavesurfer.js/dist/plugins/regions.js'
 import TimelinePlugin, { type TimelinePluginOptions } from 'wavesurfer.js/dist/plugins/timeline.js'
 import EnvelopePlugin, { type EnvelopePoint, type EnvelopePluginOptions } from 'wavesurfer.js/dist/plugins/envelope.js'
 import EventEmitter from 'wavesurfer.js/dist/event-emitter.js'
@@ -37,6 +37,7 @@ export type TrackOptions = {
     label?: string
     color?: string
   }>
+  regions?: Array<RegionParams>
   intro?: {
     endTime: number
     label?: string
@@ -288,6 +289,11 @@ class MultiTrack extends EventEmitter<MultitrackEvents> {
               resize: false,
             })
           })
+        }
+
+        // render regions
+        if (track.regions) {
+          track.regions.forEach(wsRegions.addRegion);
         }
       }),
     )
